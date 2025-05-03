@@ -4,7 +4,38 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize contact form submission
     initContactForm();
+    
+    // Handle URL fragment for scrolling to form
+    handleUrlFragment();
 });
+
+function handleUrlFragment() {
+    // Check if URL has #contactform fragment
+    if (window.location.hash === '#contactform') {
+        scrollToContactForm();
+    }
+}
+
+function scrollToContactForm() {
+    const contactForm = document.getElementById('contact-form');
+    const nameInput = document.getElementById('name');
+    
+    if (contactForm) {
+        // Scroll to the form
+        contactForm.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+        
+        // Focus on the first input field after a short delay
+        // (to ensure the scroll has completed)
+        setTimeout(() => {
+            if (nameInput) {
+                nameInput.focus();
+            }
+        }, 800);
+    }
+}
 
 function initFAQAccordion() {
     const faqItems = document.querySelectorAll('.faq-item');
