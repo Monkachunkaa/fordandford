@@ -2,8 +2,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize property filters
     initPropertyFilters();
     
-    // Initialize lightGallery for property galleries
-    initGalleries();
+    // Setup galleries and clickable images
+    setupGalleries();
 });
 
 function initPropertyFilters() {
@@ -47,11 +47,21 @@ function initPropertyFilters() {
     if (bedroomsSelect) bedroomsSelect.value = 'all';
 }
 
-function initGalleries() {
-    // Initialize each property gallery
-    document.querySelectorAll('.property-gallery').forEach((gallery, index) => {
-        if (typeof lightGallery !== 'undefined') {
-            lightGallery(gallery, {
+function setupGalleries() {
+    // Get all property cards
+    const propertyCards = document.querySelectorAll('.property-card');
+    
+    // Process each property card
+    propertyCards.forEach(card => {
+        // Get elements
+        const galleryId = card.querySelector('.gallery-button').getAttribute('href').substring(1);
+        const gallery = document.getElementById(galleryId);
+        const galleryButton = card.querySelector('.gallery-button');
+        const propertyImage = card.querySelector('.property-image');
+        
+        // Initialize lightGallery
+        if (gallery && typeof lightGallery !== 'undefined') {
+            const lgInstance = lightGallery(gallery, {
                 selector: '.gallery-item',
                 download: false,
                 counter: true,
@@ -60,19 +70,15 @@ function initGalleries() {
                 controls: true
             });
             
-            // Set up gallery button click handler
-            const galleryButton = document.querySelectorAll('.gallery-button')[index];
-            if (galleryButton) {
-                galleryButton.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    // Trigger the first gallery item click
-                    const firstGalleryItem = gallery.querySelector('.gallery-item');
-                    if (firstGalleryItem) {
-                        firstGalleryItem.click();
-                    }
-                });
-            }
+            // Function to open gallery
+            const openGallery = function(e) {
+                e.preventDefault();
+                gallery.querySelector('.gallery-item').click();
+            };
+            
+            // Add click handlers
+            galleryButton.addEventListener('click', openGallery);
+            propertyImage.addEventListener('click', openGallery);
         }
     });
 }

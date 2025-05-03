@@ -92,6 +92,44 @@
     height: 250px;
     position: relative;
     overflow: hidden;
+    cursor: pointer;
+    user-select: none;
+}
+
+.property-image::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0);
+    transition: var(--transition);
+    z-index: 1;
+}
+
+.property-image::before {
+    content: '\f00e';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    color: white;
+    font-size: 2rem;
+    z-index: 2;
+    opacity: 0;
+    transition: var(--transition);
+}
+
+.property-image:hover::after {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.property-image:hover::before {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
 }
 
 .property-image img {
