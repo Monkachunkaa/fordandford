@@ -4,6 +4,11 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Setup galleries and clickable images
     setupGalleries();
+    
+    // Call animate on scroll (now using the global function from main.js)
+    if (typeof animateOnScroll === 'function') {
+        animateOnScroll();
+    }
 });
 
 function initPropertyFilters() {
@@ -48,20 +53,17 @@ function initPropertyFilters() {
 }
 
 function setupGalleries() {
-    // Get all property cards
-    const propertyCards = document.querySelectorAll('.property-card');
-    
-    // Process each property card
-    propertyCards.forEach(card => {
+    // Process each gallery button
+    document.querySelectorAll('.gallery-button').forEach(button => {
         // Get elements
-        const galleryId = card.querySelector('.gallery-button').getAttribute('href').substring(1);
+        const galleryId = button.getAttribute('href').substring(1);
         const gallery = document.getElementById(galleryId);
-        const galleryButton = card.querySelector('.gallery-button');
-        const propertyImage = card.querySelector('.property-image');
+        const propertyCard = button.closest('.property-card');
+        const propertyImage = propertyCard.querySelector('.property-image');
         
-        // Initialize lightGallery
+        // Initialize lightGallery if available
         if (gallery && typeof lightGallery !== 'undefined') {
-            const lgInstance = lightGallery(gallery, {
+            lightGallery(gallery, {
                 selector: '.gallery-item',
                 download: false,
                 counter: true,
@@ -77,29 +79,8 @@ function setupGalleries() {
             };
             
             // Add click handlers
-            galleryButton.addEventListener('click', openGallery);
+            button.addEventListener('click', openGallery);
             propertyImage.addEventListener('click', openGallery);
         }
     });
-}
-
-// Add animation to property cards on scroll
-const animateOnScroll = function() {
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('animate');
-                observer.unobserve(entry.target);
-            }
-        });
-    }, {
-        threshold: 0.1
-    });
-    
-    document.querySelectorAll('.property-card').forEach(card => {
-        observer.observe(card);
-    });
-};
-
-// Call animate on scroll function
-animateOnScroll(); 
+} 

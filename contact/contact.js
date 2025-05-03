@@ -1,12 +1,14 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize FAQ accordion
-    initFAQAccordion();
-    
     // Initialize contact form submission
     initContactForm();
     
     // Handle URL fragment for scrolling to form
     handleUrlFragment();
+    
+    // Call animate on scroll (now using the global function from main.js)
+    if (typeof animateOnScroll === 'function') {
+        animateOnScroll();
+    }
 });
 
 function handleUrlFragment() {
@@ -35,29 +37,6 @@ function scrollToContactForm() {
             }
         }, 800);
     }
-}
-
-function initFAQAccordion() {
-    const faqItems = document.querySelectorAll('.faq-item');
-    
-    faqItems.forEach(item => {
-        const question = item.querySelector('.faq-question');
-        
-        question.addEventListener('click', () => {
-            // Check if this item is already active
-            const isActive = item.classList.contains('active');
-            
-            // Close all accordion items
-            faqItems.forEach(faq => {
-                faq.classList.remove('active');
-            });
-            
-            // If this item wasn't active before, open it
-            if (!isActive) {
-                item.classList.add('active');
-            }
-        });
-    });
 }
 
 function initContactForm() {
@@ -124,25 +103,4 @@ function isValidEmail(email) {
     // Simple email validation regex
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
-}
-
-// Add animation on scroll for testimonial items
-const animateOnScroll = function() {
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('animate');
-                observer.unobserve(entry.target);
-            }
-        });
-    }, {
-        threshold: 0.1
-    });
-    
-    document.querySelectorAll('.testimonial-item, .contact-method, .faq-item').forEach(element => {
-        observer.observe(element);
-    });
-};
-
-// Call animate on scroll function
-animateOnScroll(); 
+} 

@@ -87,25 +87,28 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Add animation on scroll using Intersection Observer
-    const animateOnScroll = function() {
-        const elements = document.querySelectorAll('.service-card, .benefit-item, .property-card, .testimonial-item');
-        
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animate');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, {
-            threshold: 0.1
-        });
-        
-        elements.forEach(element => {
-            observer.observe(element);
-        });
-    };
-    
-    // Call animate on scroll function
     animateOnScroll();
-}); 
+});
+
+// Add animation on scroll function - available globally for all pages
+function animateOnScroll() {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.1
+    });
+    
+    // Select all elements that should be animated
+    const animatedElements = document.querySelectorAll(
+        '.service-card, .benefit-item, .property-card, .testimonial-item, .contact-method'
+    );
+    
+    animatedElements.forEach(element => {
+        observer.observe(element);
+    });
+} 
