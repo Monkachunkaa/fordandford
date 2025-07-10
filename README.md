@@ -89,5 +89,5 @@ This project is proprietary and owned by Ford and Ford Properties.
 For any questions or inquiries about this website, please contact:
 
 Ford and Ford Properties  
-Email: info@fordandfordproperties.com  
+Email: fordupscaling@gmail.com  
 Phone: 828-320-3339 
