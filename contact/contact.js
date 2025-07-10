@@ -1,4 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize EmailJS
+    emailjs.init('3bZXI322cqKC56DBj');
+    
     // Initialize contact form submission
     initContactForm();
     
@@ -42,6 +45,7 @@ function scrollToContactForm() {
 function initContactForm() {
     const contactForm = document.getElementById('contact-form');
     const formResponse = document.querySelector('.form-response');
+    const submitButton = document.querySelector('.submit-button');
     
     if (contactForm) {
         contactForm.addEventListener('submit', function(e) {
@@ -66,19 +70,44 @@ function initContactForm() {
                 return;
             }
             
-            // In a real scenario, you would send the form data to your server here
-            // For demo purposes, we'll simulate a successful submission
-            
-            // Simulate form submission with a timeout to mimic server request
+            // Disable submit button and show loading state
+            submitButton.disabled = true;
+            submitButton.textContent = 'Sending...';
             showFormResponse('Sending your message...', 'success');
             
-            setTimeout(() => {
-                // Reset form
-                contactForm.reset();
-                
-                // Show success message
-                showFormResponse('Thank you for contacting us! We will get back to you shortly.', 'success');
-            }, 1500);
+            // Prepare template parameters for EmailJS
+            const templateParams = {
+                name: name,
+                email: email,
+                phone: phone || 'Not provided',
+                message: message + '\n\nInquiry Type: ' + inquiryType
+            };
+            
+            // Send email using EmailJS
+            emailjs.send('honeybee_gmail_service', 'notif_to_ryan', templateParams)
+                .then(function(response) {
+                    console.log('Email sent successfully:', response);
+                    
+                    // Reset form
+                    contactForm.reset();
+                    
+                    // Show success message
+                    showFormResponse('Thank you for contacting us! We will get back to you shortly.', 'success');
+                    
+                    // Re-enable submit button
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Send Message';
+                    
+                }, function(error) {
+                    console.error('Email sending failed:', error);
+                    
+                    // Show error message
+                    showFormResponse('Sorry, there was an error sending your message. Please try again or call us directly.', 'error');
+                    
+                    // Re-enable submit button
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Send Message';
+                });
         });
     }
 }
